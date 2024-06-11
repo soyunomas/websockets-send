@@ -18,24 +18,31 @@ import os
 async def receive_files(uri, topic):
     print("Attempting to connect to server...")
     async with websockets.connect(uri) as websocket:
-        print(f"Connected to server at {uri} at topic '{topic}'")
+        print(f"Connected to server at {uri}")
+        await websocket.send(f"subscribe:{topic}")
+        print(f"Subscribed to topic: {topic}")
+        
         while True:
             print("Waiting for message...")
             message = await websocket.recv()
-            print(f"Received message: {message}")
-            parts = message.split(":", 2)
+ #          print(f"Received message: {message}")
+            parts = message.split(":", 4)
+ #          print(f"Message parts: {parts}")
+
             if len(parts) == 3:
-                file_name = parts[0]
-                file_data = parts[1]
+                mime_type = parts[0]
+                file_name = parts[1]
+                file_data = parts[2]
                 save_file(file_name, file_data)
-                print(f"Received file '{file_name}' from topic '{topic}'")
+                print(f"Received file '{file_name}' from topic '{topic}' with MIME type '{mime_type}'")
             else:
                 print(f"Received an improperly formatted message: {message}")
 
-
 def save_file(file_name, file_data):
+    file_data_decoded = base64.b64decode(file_data)
     with open(file_name, "wb") as file:
-        file.write(base64.b64decode(file_data))
+        file.write(file_data_decoded)
+    print(f"File '{file_name}' saved successfully.")
 
 def main():
     parser = argparse.ArgumentParser(
@@ -43,7 +50,7 @@ def main():
         epilog=f"""Examples of use:
   python receive.py -u ws://localhost:8765 -t chat
   python receive.py --uri ws://example.com:8080 --topic files
-  python receive.py -u ws://192.168.1.100:9000 -t documents""",
+  python receive.py -u ws://192.168.1.100:9000 --topic documents""",
         formatter_class=argparse.RawTextHelpFormatter
     )
     parser.add_argument("-u", "--uri", type=str, required=True, help="WebSocket URI (e.g., ws://localhost:8765)")
