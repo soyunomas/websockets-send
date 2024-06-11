@@ -1,5 +1,7 @@
 # Simple WebSocket File Distribution Server and Clients.
 
+[Versión en español](README-spanish.md)
+
 This project provides a WebSocket server for distributing files among clients. It allows clients to connect, subscribe to specific topics, and receive files sent by other clients.
 It encodes the file data to base64 before sending it.
 
@@ -86,11 +88,9 @@ python3 sender.py -u ws://localhost:8765 -t chat -f /path/to/file.txt
   Handles incoming messages from clients.
   Supports subscription to topics.
   Distributes files to clients subscribed to specific topics.
-  
-  
-  
-  ### sender.py
-  
+
+### sender.py
+
   **Description:** This file provides a command-line interface (CLI) for sending files to the WebSocket server. It connects to the server via WebSocket, reads files from the local file system, encodes them as base64, and sends them to the server with the specified topic.
 
 - **Usage:** Users can specify the WebSocket URI, topic, and file path as command-line arguments to send files to the server.
@@ -147,49 +147,22 @@ To change the maximum file size limit, you need to modify the relevant code sect
 
 ## Instructions to Change Maximum File Size
 
-1. **Open `server.py`**:
+1. **Open `server.py`, `sender.py`, and `receive.py`.`**:
    
    - Locate the section of the code that sets the maximum file size.
+   
    - You will find the following lines:
      
      ```python
      # Set the maximum size to 500 MB
      max_size = 500 * 1024 * 1024  # 500 MB
      ```
-   - Modify the `max_size` value as needed.
-
-2. **Open `sender.py`**:
    
-   - Locate the section of the code that sets the maximum file size.
-   - You will find the following lines:
-     
-     ```python
-     # Set the maximum size to 500 MB
-     max_size = 500 * 1024 * 1024  # 500 MB
-     ```
    - Modify the `max_size` value as needed.
 
-3. **Open `receive.py`**:
-   
-   - Locate the section of the code that sets the maximum file size.
-   - You will find the following lines:
-     
-     ```python
-     # Set the maximum size to 500 MB
-     max_size = 500 * 1024 * 1024  # 500 MB
-     ```
-   - Modify the `max_size` value as needed.
-
-## Example
-
-If you want to increase the limit to 1 GB, you would change the `max_size` to:
-
-```python
-# Set the maximum size to 1 GB
-max_size = 1024 * 1024 * 1024  # 1 GB
-```
-
-## Dependencies
+## ## Dependencies
 
 - Python 3.x
 - websockets
+
+### 
