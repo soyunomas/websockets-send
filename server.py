@@ -52,7 +52,10 @@ def main():
 
     args = parser.parse_args()
 
-    start_server = websockets.serve(handler, args.ip, args.port)
+    # Set the maximum size to 500 MB
+    max_size = 500 * 1024 * 1024  # 500 MB
+
+    start_server = websockets.serve(handler, args.ip, args.port, max_size=max_size)
 
     print(f"Server listening on {args.ip}:{args.port}")
     asyncio.get_event_loop().run_until_complete(start_server)

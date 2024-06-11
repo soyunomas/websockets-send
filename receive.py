@@ -17,7 +17,10 @@ import os
 
 async def receive_files(uri, topic):
     print("Attempting to connect to server...")
-    async with websockets.connect(uri) as websocket:
+    # Set the maximum size to 500 MB
+    max_size = 500 * 1024 * 1024  # 500 MB
+
+    async with websockets.connect(uri, max_size=max_size) as websocket:
         print(f"Connected to server at {uri}")
         await websocket.send(f"subscribe:{topic}")
         print(f"Subscribed to topic: {topic}")

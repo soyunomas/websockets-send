@@ -26,7 +26,10 @@ async def send_file(uri, topic, file_path):
     sys.stdout.write(f"Sending: [{' ' * bar_length}] 0/{file_size} bytes\r")
     sys.stdout.flush()
 
-    async with websockets.connect(uri) as websocket:
+    max_size = 500 * 1024 * 1024  # 500 MB
+
+    async with websockets.connect(uri, max_size=max_size) as websocket:
+
         # Read the file and encode it to base64
         with open(file_path, "rb") as file:
             file_data = base64.b64encode(file.read()).decode()
@@ -38,7 +41,7 @@ async def send_file(uri, topic, file_path):
         # Send the file to the server in the correct format
         message = f"message:{topic}:{mime_type}:{file_name}:{file_data}"
         await websocket.send(message)
-        print(f"Sent file {file_name} to topic {topic} on {uri}")
+        print(f"Sent file {file_name} to topic {topic} on {uri}        ")
 
 def main():
     parser = argparse.ArgumentParser(
