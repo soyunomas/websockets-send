@@ -1,4 +1,4 @@
-# Simple WebSocket File Distribution Server and clients.
+# Simple WebSocket File Distribution Server and Clients.
 
 This project provides a WebSocket server for distributing files among clients. It allows clients to connect, subscribe to specific topics, and receive files sent by other clients.
 sender.py  connects to a WebSocket server and sends a file over the connection.It encodes the file data to base64 before sending it.
