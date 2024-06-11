@@ -89,9 +89,7 @@ python3 sender.py -u ws://localhost:8765 -t chat -f /path/to/file.txt
   Supports subscription to topics.
   Distributes files to clients subscribed to specific topics.
   
-  
-  
-  ### sender.py
+### sender.py
   
   **Description:** This file provides a command-line interface (CLI) for sending files to the WebSocket server. It connects to the server via WebSocket, reads files from the local file system, encodes them as base64, and sends them to the server with the specified topic.
 
