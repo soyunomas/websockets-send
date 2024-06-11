@@ -31,7 +31,11 @@ Replace `8765` with the desired port number and `0.0.0.0` with the desired IP ad
 
 Now open the `index.html` file in your web browser to connect to the WebSocket server.
 
-### Send file to de browser with sender.py
+### Send file to de browser with sender.html
+
+Open the `sender.html` file in your web browser to connect to the WebSocket server and send a file.
+
+### Alternative, send file to de browser with sender.py
 
 Use the sender.py script to send files to the server. The command format is as follows:
 ```sh
@@ -41,6 +45,7 @@ python3 sender.py -u ws://localhost:8765 -t chat -f /path/to/file.txt
 - `-t chat`: This specifies the topic to which the file will be sent. Replace chat with the desired topic.
 - `-f /path/to/file.txt`: This specifies the path to the file you want to send. Replace /path/to/file.txt with the actual path to the file you want to distribute.
 
+## File descriptions
 ### server.py
 - **Description:** This file implements a WebSocket server for handling file distribution among clients. It listens for incoming WebSocket connections, manages subscriptions to topics, and forwards received files to subscribed clients.
 
@@ -81,6 +86,15 @@ Saves received files to the local file system.
 Connects to the WebSocket server using JavaScript.
 Allows users to subscribe to topics and download files received from the server.
 Provides a user-friendly interface for interacting with the server.
+
+### sender.html
+
+- **Description:** This HTML file provides a simple web interface for sending files to a WebSocket server. It allows users to connect to the server, specify the topic for the message, select a file from their local system, and send it to the server.
+
+- **Usage:** Users can open the HTML file in a web browser and fill out the WebSocket URL, topic, and select a file to send. After connecting to the server, they can click the "Send File" button to upload the selected file to the server.
+
+- **Functionality:** Connects to the WebSocket server using JavaScript. Allows users to specify the WebSocket URL and topic for the message. Provides a file input field for selecting files to send. Upon connecting to the server and selecting a file, users can send the file to the server by clicking the "Send File" button. Displays a confirmation message after the file is successfully sent.
+
 
 ## How It Works
 
