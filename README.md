@@ -35,8 +35,6 @@ python3 server.py -p 8765 -i 0.0.0.0
 
 Replace `8765` with the desired port number and `0.0.0.0` with the desired IP address.
 
-
-
 <img src="img/python_server.png" title="" alt="Python Server" data-align="center">
 
 ### Open index.html or receive.py
@@ -89,7 +87,9 @@ python3 sender.py -u ws://localhost:8765 -t chat -f /path/to/file.txt
   Supports subscription to topics.
   Distributes files to clients subscribed to specific topics.
   
-### sender.py
+  
+  
+  ### sender.py
   
   **Description:** This file provides a command-line interface (CLI) for sending files to the WebSocket server. It connects to the server via WebSocket, reads files from the local file system, encodes them as base64, and sends them to the server with the specified topic.
 
@@ -138,6 +138,56 @@ python3 sender.py -u ws://localhost:8765 -t chat -f /path/to/file.txt
 - Upon connection, clients can subscribe to specific topics to receive files related to those topics.
 - When a client sends a file to a topic, the server distributes the file to all clients subscribed to that topic.
 - File messages are formatted as follows: `{mime_type}:{file_name}:{file_data}`.
+
+# Project File Size Limitation
+
+In this project, the maximum file size for uploads and downloads is set to 500 MB. This limit is enforced in the following files: `server.py`, `sender.py`, and `receive.py`.
+
+To change the maximum file size limit, you need to modify the relevant code sections in these files.
+
+## Instructions to Change Maximum File Size
+
+1. **Open `server.py`**:
+   
+   - Locate the section of the code that sets the maximum file size.
+   - You will find the following lines:
+     
+     ```python
+     # Set the maximum size to 500 MB
+     max_size = 500 * 1024 * 1024  # 500 MB
+     ```
+   - Modify the `max_size` value as needed.
+
+2. **Open `sender.py`**:
+   
+   - Locate the section of the code that sets the maximum file size.
+   - You will find the following lines:
+     
+     ```python
+     # Set the maximum size to 500 MB
+     max_size = 500 * 1024 * 1024  # 500 MB
+     ```
+   - Modify the `max_size` value as needed.
+
+3. **Open `receive.py`**:
+   
+   - Locate the section of the code that sets the maximum file size.
+   - You will find the following lines:
+     
+     ```python
+     # Set the maximum size to 500 MB
+     max_size = 500 * 1024 * 1024  # 500 MB
+     ```
+   - Modify the `max_size` value as needed.
+
+## Example
+
+If you want to increase the limit to 1 GB, you would change the `max_size` to:
+
+```python
+# Set the maximum size to 1 GB
+max_size = 1024 * 1024 * 1024  # 1 GB
+```
 
 ## Dependencies
 
