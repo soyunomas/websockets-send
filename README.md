@@ -169,7 +169,7 @@ To change the maximum file size limit, you need to modify the relevant code sect
 
 #### MIT License
 
-Copyright (c) 2024
+Copyright (c) 2024 soyunomas
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
