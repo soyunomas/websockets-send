@@ -27,13 +27,21 @@ To start the WebSocket server, run the following command:
 python3 server.py -p 8765 -i 0.0.0.0
 ```
 Replace `8765` with the desired port number and `0.0.0.0` with the desired IP address.
-### Open index.html
+### Open index.html or receive.py
 
-Now open the `index.html` file in your web browser to connect to the WebSocket server.
+Now open the `index.html` file in your web browser to connect to the WebSocket server. 
+
+Alternatively, you can use `receive.py` to download files via the command line. The file will be saved in the directory from which you run `receive.py`.
+
+For example:
+
+`python receive.py -u ws://localhost:8765 -t chat`
+
+This will connect to the WebSocket server at `ws://localhost:8765` and subscribe to the `chat` topic to receive files.
 
 ### Send file to de browser with sender.html
 
-Open the `sender.html` file in your web browser to connect to the WebSocket server and send a file.
+Open the `sender.html` file in your web browser to connect to the WebSocket server and send a file. 
 
 ### Alternative, send file to de browser with sender.py
 
