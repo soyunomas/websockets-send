@@ -16,6 +16,7 @@ import argparse
 import base64
 import os
 import sys
+from config import max_size  # Import the max_size from the config file
 
 async def send_file(uri, topic, file_path):
     # Obtain the file size
@@ -25,8 +26,6 @@ async def send_file(uri, topic, file_path):
     bar_length = 40
     sys.stdout.write(f"Sending: [{' ' * bar_length}] 0/{file_size} bytes\r")
     sys.stdout.flush()
-
-    max_size = 500 * 1024 * 1024  # 500 MB
 
     async with websockets.connect(uri, max_size=max_size) as websocket:
 

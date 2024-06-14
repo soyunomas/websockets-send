@@ -14,11 +14,10 @@ import websockets
 import argparse
 import base64
 import os
+from config import max_size  # Import the max_size from the config file
 
 async def receive_files(uri, topic):
     print("Attempting to connect to server...")
-    # Set the maximum size to 500 MB
-    max_size = 500 * 1024 * 1024  # 500 MB
 
     async with websockets.connect(uri, max_size=max_size) as websocket:
         print(f"Connected to server at {uri}")

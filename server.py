@@ -11,6 +11,7 @@ import asyncio
 import websockets
 import argparse
 from collections import defaultdict
+from config import max_size  # Import the max_size from the config file
 
 clients = defaultdict(set)
 
@@ -51,9 +52,6 @@ def main():
     parser.add_argument("-i", "--ip", type=str, default="0.0.0.0", help="IP address to listen on (default: 0.0.0.0)")
 
     args = parser.parse_args()
-
-    # Set the maximum size to 500 MB
-    max_size = 500 * 1024 * 1024  # 500 MB
 
     start_server = websockets.serve(handler, args.ip, args.port, max_size=max_size)
 
