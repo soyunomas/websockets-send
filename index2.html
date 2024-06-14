@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket File Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .field-group {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .field-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .file-info {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+        .progress-container {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+        }
+        .progress-bar {
+            width: 0;
+            height: 20px;
+            background-color: #007bff;
+            border-radius: 10px;
+        }
+        .progress-text {
+            text-align: center;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebSocket File Downloader</h1>
+    <form id="connectionForm">
+        <div class="field-group">
+            <label for="socketURL" class="field-label">WebSocket URL:</label>
+            <input type="text" id="socketURL" placeholder="WebSocket URL" value="ws://localhost:8765">
+        </div>
+        <div class="field-group">
+            <label for="topic" class="field-label">Topic:</label>
+            <input type="text" id="topic" placeholder="Topic" value="chat">
+        </div>
+        <button type="submit">Connect</button>
+    </form>
+    <button id="downloadButton" disabled>Download File</button>
+    <div class="file-info" id="fileInfo"></div>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="progress-text" id="progressText">0%</div>
+    </div>
+
+    <script>
+        const connectionForm = document.getElementById('connectionForm');
+        const socketURLInput = document.getElementById('socketURL');
+        const topicInput = document.getElementById('topic');
+        const connectionButton = connectionForm.querySelector('button');
+        const downloadButton = document.getElementById('downloadButton');
+        const fileInfo = document.getElementById('fileInfo');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+
+        let socket;
+        let fileData = null;
+        let fileName = 'file'; // Nombre predeterminado
+        let mimeType = 'application/octet-stream'; // Tipo MIME predeterminado
+        let topic = 'chat'; // Tema predeterminado
+        let isConnected = false;
+
+        connectionForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            if (isConnected) {
+                disconnectWebSocket();
+            } else {
+                connectWebSocket();
+            }
+        });
+
+        function connectWebSocket() {
+            const uri = socketURLInput.value;
+            socket = new WebSocket(uri);
+            topic = topicInput.value;
+
+            socket.onopen = function() {
+                console.log('Connected to server');
+                socket.send(`subscribe:${topic}`);
+                console.log(`Subscribed to topic: ${topic}`);
+                fileInfo.textContent = '';
+                isConnected = true;
+                connectionButton.textContent = 'Disconnect';
+            };
+
+            socket.onmessage = function(event) {
+                const messageParts = event.data.split(':');
+                mimeType = messageParts[0];
+                fileName = messageParts[1];
+                fileData = messageParts.slice(2).join(':'); // El resto es el archivo en base64
+                console.log('File received');
+                downloadButton.disabled = false;
+                fileInfo.textContent = `Received file: ${fileName}`;
+                updateProgress(100);
+            };
+
+            socket.onclose = function() {
+                console.log('Connection closed.');
+                isConnected = false;
+                connectionButton.textContent = 'Connect';
+                setTimeout(() => {
+                    if (!isConnected) {
+                        console.log('Attempting to reconnect...');
+                        connectWebSocket();
+                    }
+                }, 5000); // Espera 5 segundos antes de intentar reconectar
+            };
+
+            socket.onmessage = function(event) {
+                const messageParts = event.data.split(':');
+                mimeType = messageParts[0];
+                fileName = messageParts[1];
+                fileData = messageParts.slice(2).join(':'); // El resto es el archivo en base64
+                console.log('File received');
+                downloadButton.disabled = false;
+                fileInfo.textContent = `Received file: ${fileName}`;
+                updateProgress(100); // Update the progress bar to 100% when file is fully received
+            };
+        }
+
+        function disconnectWebSocket() {
+            if (socket) {
+                socket.close();
+                isConnected = false;
+                connectionButton.textContent = 'Connect';
+                fileInfo.textContent = '';
+                downloadButton.disabled = true;
+                updateProgress(0); // Reset progress bar when disconnected
+            }
+        }
+
+        downloadButton.addEventListener('click', function() {
+            if (fileData) {
+                const blob = base64ToBlob(fileData, mimeType);
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName; // Nombre del archivo a descargar
+                document.body.appendChild(a);
+                a.click();
+
+                URL.revokeObjectURL(url);
+            }
+        });
+
+        function base64ToBlob(base64Data, mimeType) {
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            return new Blob([byteArray], { type: mimeType });
+        }
+
+        function updateProgress(percentage) {
+            progressBar.style.width = `${percentage}%`;
+            progressText.textContent = `${percentage}%`;
+        }
+    </script>
+</body>
+</html>
+
