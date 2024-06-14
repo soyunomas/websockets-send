@@ -4,7 +4,9 @@
 
 Este proyecto proporciona un servidor WebSocket para distribuir archivos entre clientes. Permite a los clientes conectarse, suscribirse a temas específicos y recibir archivos enviados por otros clientes. Codifica los datos del archivo en base64 antes de enviarlos. 
 
-## Instalación Primero, clona el repositorio:
+## Instalación 
+
+Primero, clona el repositorio:
 
 ```she
 git clone https://github.com/soyunomas/websockets-send.gitgit clone https://github.com/soyunomas/websockets-send.git
@@ -22,7 +24,7 @@ Instala las dependencias:
 pip install websockets
 ```
 
-#### Uso
+## Uso
 
 ### Iniciar el servidor
 
