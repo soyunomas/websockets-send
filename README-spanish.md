@@ -157,18 +157,18 @@ Para cambiar el límite de tamaño máximo de archivo, debes modificar las secci
 
 ## Instrucciones para Cambiar el Tamaño Máximo de Archivo
 
-1. **Abrir `server.py`,  `sender.py` y `receiver.py`**:
+1. **Abre `config.py`**:
    
-   Localiza la sección del código que establece el tamaño máximo de archivo.
+   - Localiza la sección del código que establece el tamaño máximo de archivo.
    
-   Encontrarás las siguientes líneas:
-
-```python
-# Set the maximum size to 500 MB
-max_size = 500 * 1024 * 1024  # 500 MB
-```
-
-  Modifica el valor de `max_size` según sea necesario.
+   - Encontrarás las siguientes líneas:
+     
+     ```python
+     # Establecer el tamaño máximo a 500 MB
+     max_size = 500 * 1024 * 1024  # 500 MB
+     ```
+   
+   - Modifica el valor de `max_size` según sea necesario.
 
 ## Dependencias
 
