@@ -160,7 +160,7 @@ To change the maximum file size limit, you need to modify the relevant code sect
    
    - Modify the `max_size` value as needed.
 
-## ## Dependencies
+### Dependencies
 
 - Python 3.x
 - websockets
