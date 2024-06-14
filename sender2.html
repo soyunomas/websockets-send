@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket File Sender</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .field-group {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .field-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .file-info {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+        .progress-container {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+        }
+        .progress-bar {
+            width: 0;
+            height: 20px;
+            background-color: #007bff;
+            border-radius: 10px;
+        }
+        .progress-text {
+            text-align: center;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebSocket File Sender</h1>
+    <form id="connectionForm">
+        <div class="field-group">
+            <label for="socketURL" class="field-label">WebSocket URL:</label>
+            <input type="text" id="socketURL" placeholder="WebSocket URL" value="ws://localhost:8765">
+        </div>
+        <div class="field-group">
+            <label for="topic" class="field-label">Topic:</label>
+            <input type="text" id="topic" placeholder="Topic" value="chat">
+        </div>
+        <div class="field-group">
+            <label for="fileInput" class="field-label">Select File:</label>
+            <input type="file" id="fileInput">
+        </div>
+        <button type="submit">Send File</button>
+    </form>
+    <div class="file-info" id="fileInfo"></div>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="progress-text" id="progressText">0%</div>
+    </div>
+
+    <script>
+        const connectionForm = document.getElementById('connectionForm');
+        const socketURLInput = document.getElementById('socketURL');
+        const topicInput = document.getElementById('topic');
+        const fileInput = document.getElementById('fileInput');
+        const sendButton = connectionForm.querySelector('button');
+        const fileInfo = document.getElementById('fileInfo');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+
+        let socket;
+        let isConnected = false;
+
+        connectionForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            if (isConnected) {
+                sendFile();
+            } else {
+                connectWebSocket();
+            }
+        });
+
+        function connectWebSocket() {
+            const uri = socketURLInput.value;
+            socket = new WebSocket(uri);
+
+            socket.onopen = function() {
+                console.log('Connected to server');
+                sendButton.textContent = 'Send File';
+                fileInfo.textContent = '';
+                isConnected = true;
+            };
+
+            socket.onclose = function() {
+                console.log('Connection closed.');
+                isConnected = false;
+                sendButton.textContent = 'Connect';
+            };
+        }
+
+        function sendFile() {
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onprogress = function(event) {
+                    if (event.lengthComputable) {
+                        const percentLoaded = Math.round((event.loaded / event.total) * 100);
+                        updateProgress(percentLoaded);
+                    }
+                };
+                reader.onload = function(event) {
+                    const fileData = event.target.result;
+                    const base64FileData = btoa(fileData);
+
+                    const mimeType = file.type || "application/octet-stream";
+                    const message = `message:${topicInput.value}:${mimeType}:${file.name}:${base64FileData}`;
+                    socket.send(message);
+
+                    fileInfo.textContent = `Sent file: ${file.name}`;
+                    fileInput.value = ''; // Limpiar el input de archivo después de enviarlo
+                    updateProgress(100);
+                };
+                reader.readAsBinaryString(file);
+            } else {
+                console.log('No file selected.');
+            }
+        }
+
+        function updateProgress(percentage) {
+            progressBar.style.width = `${percentage}%`;
+            progressText.textContent = `${percentage}%`;
+        }
+    </script>
+</body>
+</html>
+
+
+
