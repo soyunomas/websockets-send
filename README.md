@@ -147,7 +147,7 @@ To change the maximum file size limit, you need to modify the relevant code sect
 
 ## Instructions to Change Maximum File Size
 
-1. **Open `server.py`, `sender.py`, and `receive.py`.`**:
+1. **Open `config.py`**:
    
    - Locate the section of the code that sets the maximum file size.
    
@@ -159,6 +159,7 @@ To change the maximum file size limit, you need to modify the relevant code sect
      ```
    
    - Modify the `max_size` value as needed.
+
 
 ### Dependencies
 
