@@ -5,6 +5,27 @@
 This project provides a WebSocket server for distributing files among clients. It allows clients to connect, subscribe to specific topics, and receive files sent by other clients.
 It encodes the file data to base64 before sending it.
 
+## Possible Use Cases
+
+1. **Classroom**:
+   - **Real-time Collaboration**: Students can share files and work together on projects or assignments.
+   - **Material Distribution**: Teachers can send reading materials, presentations, or exercises directly to students.
+2. **Office**:
+   - **Document Sharing**: Employees can send important files or updates to colleagues.
+   - **Real-time Notifications**: Alerts or updates can be sent to team members.
+3. **Home**:
+   - **Photo or Video Sharing**: Family members can exchange photos or videos.
+
+## Key Advantages
+
+**Self-Contained Web Page**: The web page for sending or receiving files can be hosted directly on the user's device. No external web server is necessary, making it convenient for local or personal use.
+
+**Topic-Based Grouping**: The use of topics simplifies file distribution. Clients can subscribe to specific channels (topics) based on their interests or roles, ensuring that they receive relevant files only.
+
+<img src="img/Topics.png" title="" alt="topics" data-align="center">
+
+When sending a file to a specific topic, all those listening to that topic will receive it.
+
 ## Installation
 
 First, clone the repository:
