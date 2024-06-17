@@ -4,6 +4,27 @@
 
 Este proyecto proporciona un servidor WebSocket para distribuir archivos entre clientes. Permite a los clientes conectarse, suscribirse a temas específicos y recibir archivos enviados por otros clientes. Codifica los datos del archivo en base64 antes de enviarlos. 
 
+## Posibles Casos de Uso
+
+1. **Aula**:
+   - **Colaboración en Tiempo Real**: Los estudiantes pueden compartir archivos y trabajar juntos en proyectos o tareas.
+   - **Distribución de Material**: Los profesores pueden enviar materiales de lectura, presentaciones o ejercicios directamente a los estudiantes.
+2. **Oficina**:
+   - **Compartir Documentos**: Los empleados pueden enviar archivos importantes o actualizaciones a sus colegas.
+   - **Notificaciones en Tiempo Real**: Se pueden enviar alertas o actualizaciones a los miembros del equipo.
+3. **Hogar**:
+   - **Compartir Fotos o Videos**: Los miembros de la familia pueden intercambiar fotos o videos.
+
+## Ventajas Clave
+
+**Página Web Autónoma**: La página web para enviar o recibir archivos se puede alojar directamente en el dispositivo del usuario. No es necesario un servidor web externo, lo que resulta conveniente para uso local o personal.
+
+**Agrupación Basada en Temas (topics)**: El uso de temas (topics) simplifica la distribución de archivos. Los clientes pueden suscribirse a canales específicos (temas) según sus intereses o roles, asegurando que reciban archivos relevantes.
+
+<img src="img/Topics.png" title="" alt="topics" data-align="center">
+
+Cuando se envía un archivo a un tema (topic) específico, todos los que estén escuchando ese tema lo recibirán.
+
 ## Instalación 
 
 Primero, clona el repositorio:
