@@ -11,12 +11,19 @@ Usage:
 """
 
 import asyncio
-import websockets
 import argparse
 import base64
 import os
 import sys
 from config import max_size  # Import the max_size from the config file
+
+try:
+  import websockets
+except ImportError:
+  print("Error: The 'websockets' library is not installed.")
+  print("Please install it using 'pip install websockets'.")
+  exit(1)
+
 
 async def send_file(uri, topic, file_path):
     # Obtain the file size
